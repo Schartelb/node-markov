@@ -8,7 +8,7 @@ module.exports = class MarkovMachine {
   constructor(text) {
     let words = text.split(/[ \r\n]+/);
     this.words = words.filter(c => c !== "");
-    let markovchain = this.makeChains();
+    this.markovchain = this.makeChains();
   }
 
   /** set markov chains:
@@ -35,13 +35,21 @@ module.exports = class MarkovMachine {
   /** return random text from chains */
 
   makeText(numWords = 100) {
-    let output;
-    let w = 0;
-    output += markovchain[w]
+    let address = Object.keys(this.markovchain)[0]
+    let output = address
     for (let i = 0; i < numWords; i++) {
-      w = markovchain[w][(Math.ceil(Math.random() * markovchain[w].length))]
+      if (!address) {
+        console.log(output)
+        break
+      }
+      let w = this.markovchain[address][(Math.ceil(Math.random() * (this.markovchain[address].length - 1)))]
+      console.log(`w = ${w}`)
       output += ` ${w}`
+      console.log(`address = ${this.markovchain[address]} - ${address}`)
+      console.log((Math.floor(Math.random() * this.markovchain[address].length)))
+      address = w
     }
-    console.log(output)
   }
+
 }
+
